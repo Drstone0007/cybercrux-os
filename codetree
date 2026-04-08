@@ -1,0 +1,17 @@
+cybercrux-os/
+├── README.md                  (use the one I gave earlier)
+├── LICENSE                    (strict military/research version)
+├── main.py                    # Core CLI simulation engine
+├── dashboard/
+│   ├── app.py                 # Simple Streamlit or Flask web dashboard
+│   └── templates/             # HTML/JS for holographic-style UI (optional)
+├── modules/
+│   ├── falcon_swarm.py        # Swarm simulation logic
+│   ├── roe_amplifier.py       # Rules of Engagement engine
+│   ├── nuke_orb.py            # Mock escalation control
+│   └── nation_dashboards.py   # Theme switcher
+├── core/
+│   ├── kernel_mock.py         # "Hardened" security & logging
+│   └── command_parser.py      # Voice/text command handler
+├── renders/                   # (add the 8K images we generated earlier)
+└── docs/                      # All .md files
