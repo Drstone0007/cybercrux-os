@@ -1,13 +1,28 @@
-# main.py - CyberCrux OS Simulation Prototype
+# main.py - CyberCrux OS v1.0 MIL-GRADE SIMULATION (Fully Fixed)
 import time
-import random
+import sys
+import os
+
+# Robust path handling - works even if __file__ is not defined
+try:
+    # Normal script execution
+    base_path = os.path.dirname(os.path.abspath(__file__))
+except NameError:
+    # Running in interactive REPL / Jupyter / some online editors
+    base_path = os.getcwd()
+
+sys.path.insert(0, base_path)
+
+from core.command_parser import parse_command
 from modules.falcon_swarm import FalconSwarm
 from modules.roe_amplifier import ROEAmplifier
 from modules.nuke_orb import NukeOrb
-from core.command_parser import parse_command
 
-print("=== CYBERCRUX OS v1.0 MIL-GRADE SIMULATION ===")
-print("Zero-Trust Kernel Initialized. Multimodal Interface Active.\n")
+print("=" * 65)
+print("   🛡️  CYBERCRUX OS v1.0 MIL-GRADE SIMULATION")
+print("   Hardened Kinetic Kernel Online • Multimodal Interface Active")
+print("=" * 65)
+print()
 
 # Initialize modules
 swarm = FalconSwarm(num_drones=48, theater="Ukraine")
@@ -16,22 +31,43 @@ nuke_orb = NukeOrb()
 
 current_dashboard = "🇺🇦 Ukraine"
 
+print("Type 'help' for available commands. Type 'exit' to quit.\n")
+
 while True:
-    command = input(f"[{current_dashboard}] Kinetic Lead > ").strip().lower()
-    
-    if command == "exit":
-        print("Shutting down CyberCrux OS... Simulation terminated.")
+    try:
+        command = input(f"[{current_dashboard}] Kinetic Lead > ").strip()
+        
+        if not command:
+            continue
+            
+        if command.lower() == "exit":
+            print("\nShutting down CyberCrux OS... Simulation terminated.")
+            break
+
+        # Dashboard switching
+        lower_cmd = command.lower()
+        if "switch" in lower_cmd:
+            if "usa" in lower_cmd:
+                current_dashboard = "🇺🇸 USA"
+                print("✅ Switched to USA JADC2 variant.")
+            elif "france" in lower_cmd:
+                current_dashboard = "🇫🇷 France"
+                print("✅ Switched to France SCORPION variant.")
+            elif "asia" in lower_cmd:
+                current_dashboard = "🌏 Asia"
+                print("✅ Switched to Asia-Pacific variant.")
+            else:
+                print("Available: usa, france, asia")
+            continue
+
+        # Parse and execute command
+        result = parse_command(command, swarm, roe, nuke_orb, current_dashboard)
+        print(result)
+        
+        time.sleep(0.4)
+
+    except KeyboardInterrupt:
+        print("\n\nSession terminated by operator.")
         break
-    
-    result = parse_command(command, swarm, roe, nuke_orb, current_dashboard)
-    
-    if "switch" in command and "usa" in command:
-        current_dashboard = "🇺🇸 USA"
-        print("Dashboard switched to USA variant.")
-    elif "switch" in command and "france" in command:
-        current_dashboard = "🇫🇷 France"
-        print("Dashboard switched to France variant.")
-    # Add more switches as needed
-    
-    print(result)
-    time.sleep(0.5)
+    except Exception as e:
+        print(f"⚠️  System error: {e}")
